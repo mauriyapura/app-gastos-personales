@@ -3,7 +3,8 @@ const express = require("express");
 const path = require("path");
 const config = require("../../config/index");
 const morgan = require("morgan");
-
+const cors = require("cors");
+const logger = require("../logger/index");
 
 
 class ExpressServer{
@@ -11,19 +12,25 @@ class ExpressServer{
     constructor(){
 
         this.app = express();
-        this.port = config.port
+        this.port = config.port;
         this.basePathAuth = `${config.api.prefix}/auth`;
         this._middlewares();
 
-        this._notFound();
-    
+        this._notFound();    
 
     }
 
     _middlewares(){
         this.app.use(express.json());
         this.app.use(morgan("tiny"));
+        this.app.use(cors());
     }
+    /*
+    _routes(){            
+
+        this.app.use(this.basePathAuth, require("../../routes/auth"));
+        this.app.use(this.basePathUser, require("../../routes/users"));
+    }*/
 
     _notFound(){
         this.app.use((req,res,next)=>{
@@ -50,12 +57,22 @@ class ExpressServer{
         });
     }
 
+    async start(){
+        this.app.listen(this.port,(error)=>{
+            if(error){
+                logger.error(error);
+                process.exit(1);
+                return;
+            }            
+        })
+    }
+
 
 
 }
 
 
-module.exports = ExpressServer
+module.exports = ExpressServer;
 
 
 

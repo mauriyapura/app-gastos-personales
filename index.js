@@ -1,4 +1,5 @@
+//ejecucion del server instanciado
 
-//ejecucion de la clase instanciada
+const startServer = require("./src/loaders/index");
 
-
+startServer();
