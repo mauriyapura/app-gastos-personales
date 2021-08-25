@@ -1,14 +1,35 @@
 {
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
+    "mysql2": "^2.3.0",
     "sequelize": "^6.6.5",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
-  }
+  },
+  "name": "practica-16-challengejs",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src",
+    "dev": "npx nodemon src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mauriyapura/backend-ChallengeJS.git"
+  },
+  "author": "Mauricio Gabriel Yapura",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mauriyapura/backend-ChallengeJS/issues"
+  },
+  "homepage": "https://github.com/mauriyapura/backend-ChallengeJS#readme",
+  "description": ""
 }
