@@ -11,8 +11,8 @@ const startServer = async ()=> {
     try {
 
         await sequelize.authenticate();    
-        sequelize.sync({ alter: true }); 
-        //sequelize.sync();   
+        //sequelize.sync({ alter: true }); 
+        sequelize.sync();   
         logger.info("DB loaded and connected");     
     
         const server = new ExpressServer();

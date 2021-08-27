@@ -1,13 +1,13 @@
 
 const { DataTypes } = require("sequelize");
-const sequelize = require("sequelize");
+const sequelize = require("../loaders/sequelize");
 
 
 const User = sequelize.define('users',{
 
     email: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: false,        
         unique: true
     },
     password:{
@@ -21,7 +21,7 @@ const User = sequelize.define('users',{
     }
 
 },{
-
+    timestamps: false
 });
 
 

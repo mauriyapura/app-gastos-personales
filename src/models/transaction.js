@@ -14,10 +14,7 @@ const Transaction = sequelize.define('transactions',{
     amount: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    user: {
-        type: DataTypes.STRING(100)
-    }    
+    }  
 
 },{
 

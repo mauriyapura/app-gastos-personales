@@ -14,10 +14,12 @@ class ExpressServer{
         this.app = express();
         this.port = config.port;
         this.basePathAuth = `${config.api.prefix}/auth`;
+        this.basePathUser = `${config.api.prefix}/users`;
         this._middlewares();
 
-        this._notFound();    
-
+        this._routes();           
+        this._notFound();
+        this._errorHandler();
     }
 
     _middlewares(){
@@ -25,12 +27,15 @@ class ExpressServer{
         this.app.use(morgan("tiny"));
         this.app.use(cors());
     }
-    /*
-    _routes(){            
+    
+    
 
-        this.app.use(this.basePathAuth, require("../../routes/auth"));
+    _routes(){      
+
+        //this.app.use(this.basePathAuth, require("../../routes/auth"));
         this.app.use(this.basePathUser, require("../../routes/users"));
-    }*/
+
+    }
 
     _notFound(){
         this.app.use((req,res,next)=>{
