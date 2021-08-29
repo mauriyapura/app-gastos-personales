@@ -2,25 +2,27 @@ const express = require("express");
 const User = require("../models/users");
 
 
-const getUsers = async(req,res) => {
-
-    const users = await User.findAll();    // Igual que mongoose pero sequelize devuelve promesa
-    res.json(users);
-}
 
 const getUser = async(req,res) => {
 
-    const {id} = req.params;
-    const user = await User.findByPk(id);    
+    const {email, password} = req.query;
+    console.log("email es: ", email)
+    const user = await User.findOne({
+        where: {
+            email: email,
+            password: password
+        }
+    }); 
+
     if(user){
-        res.json(user);
+        res.json(user); 
     }else{
-        res.status(404)
-        res.json({
-            msg: `No existe un usuario con el id ${id}`
-        })
-    }
+        return res.status(404).json({
+            msg: `Email o contraseña incorrecta`
+        });
+    }    
 }
+
 
 const postUser = async(req, res ) => {
 
@@ -34,7 +36,7 @@ const postUser = async(req, res ) => {
         
     } catch (error) {
         console.error(error);
-        res.status(500)
+        res.status(404)
         res.json({
             msg: 'Hable con el administrador'
         })        
@@ -88,8 +90,7 @@ const deleteUser = async(req, res)=>{
 
 
 
-module.exports = {
-    getUsers,
+module.exports = {    
     getUser,
     postUser,
     updateUser,
