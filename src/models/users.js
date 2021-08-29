@@ -1,7 +1,7 @@
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../loaders/sequelize");
-
+const transactions = require("./transaction");
 
 const User = sequelize.define('users',{
 
@@ -23,6 +23,8 @@ const User = sequelize.define('users',{
 },{
     timestamps: false
 });
+
+User.hasMany(transactions, {foreignKey: 'user_id'})
 
 
 module.exports = User;

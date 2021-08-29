@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("sequelize");
+const sequelize = require("../loaders/sequelize/index");
 
 const Transaction = sequelize.define('transactions',{
 
@@ -17,7 +17,7 @@ const Transaction = sequelize.define('transactions',{
     }  
 
 },{
-
+    timestamps: false
 });
 
 

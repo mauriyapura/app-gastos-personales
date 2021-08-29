@@ -15,6 +15,8 @@ class ExpressServer{
         this.port = config.port;
         this.basePathAuth = `${config.api.prefix}/auth`;
         this.basePathUser = `${config.api.prefix}/users`;
+        this.basePathTransaction = `${config.api.prefix}/transactions`;
+
         this._middlewares();
 
         this._routes();           
@@ -34,6 +36,7 @@ class ExpressServer{
 
         //this.app.use(this.basePathAuth, require("../../routes/auth"));
         this.app.use(this.basePathUser, require("../../routes/users"));
+        this.app.use(this.basePathTransaction, require("../../routes/transactions"));
 
     }
 
