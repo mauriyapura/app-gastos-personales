@@ -26,13 +26,12 @@ const getUser = async(req,res) => {
 
 const postUser = async(req, res ) => {
 
-    const {body} = req;
-    // Es necesario el middleware de validacion de post para que no se cree el usuario si tiene el mismo email.
+    const {email, password} = req.body;
+    
     try {
-        const user = new User(body);
-        await user.save();
-        res.json( user )
-
+        const newUser = new User({email, password});        
+        await newUser.save();
+        res.json( newUser );
         
     } catch (error) {
         console.error(error);
