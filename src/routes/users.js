@@ -20,5 +20,10 @@ routes.post("/", postRequestValidations,postUser);
 routes.put("/:id", updateUser);
 routes.delete("/:id", deleteUser);
 
+/*
+routes.post("/signin", passport.authenticate("local", {
+    successRedirect:"/main",
+    failureRedirect:"/users/signin"     
+}));*/
 
 module.exports = routes;

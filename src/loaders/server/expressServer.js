@@ -5,7 +5,9 @@ const config = require("../../config/index");
 const morgan = require("morgan");
 const cors = require("cors");
 const logger = require("../logger/index");
+const passport = require("passport");
 
+const session = require("express-session");
 
 class ExpressServer{
 
@@ -25,9 +27,19 @@ class ExpressServer{
     }
 
     _middlewares(){
+        this.app.use(express.urlencoded({ extended: true}));
         this.app.use(express.json());
         this.app.use(morgan("tiny"));
         this.app.use(cors());
+        
+        this.app.use(session({
+            secret: "mi-secreto",
+            resave: true,
+            saveUninitialized: true
+        }))
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
+
     }
     
     
