@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const logger = require("../logger/index");
 const passport = require("passport");
-
+const flash = require("connect-flash");
 const session = require("express-session");
 
 class ExpressServer{
@@ -14,6 +14,7 @@ class ExpressServer{
     constructor(){
 
         this.app = express();
+        require("../../config/passport");
         this.port = config.port;
         this.basePathAuth = `${config.api.prefix}/auth`;
         this.basePathUser = `${config.api.prefix}/users`;
@@ -39,7 +40,8 @@ class ExpressServer{
         }))
         this.app.use(passport.initialize());
         this.app.use(passport.session());
-
+        this.app.use(flash());
+        
     }
     
     

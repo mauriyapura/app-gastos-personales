@@ -1,16 +1,18 @@
 const express = require("express");
 const User = require("../models/users");
+const bcrypt = require("bcrypt");
 
 
 
 const getUser = async(req,res) => {
 
     const {email, password} = req.query;
-    console.log("email es: ", email)
+    console.log("email es: ", email);
+    const queryPassword = await bcrypt.hash(password, 10);
     const user = await User.findOne({
         where: {
             email: email,
-            password: password
+            password: queryPassword
         }
     }); 
 

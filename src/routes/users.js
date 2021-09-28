@@ -11,7 +11,7 @@ const {
     postRequestValidations
 } = require("../middlewares/users/index");
 
-
+const passport = require("passport");
 const routes = Router();
 
 
@@ -20,10 +20,9 @@ routes.post("/", postRequestValidations,postUser);
 routes.put("/:id", updateUser);
 routes.delete("/:id", deleteUser);
 
-/*
-routes.post("/signin", passport.authenticate("local", {
-    successRedirect:"/main",
-    failureRedirect:"/users/signin"     
-}));*/
+
+routes.post("/login", passport.authenticate("local"), (req,res)=>{
+    res.json({email: req.user.email, password: req.user.password})
+});
 
 module.exports = routes;

@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { isAuthenticated} = require("../helpers/auth");
 
 const {
     getTransactions,
@@ -15,7 +16,7 @@ const {
 
 const routes = Router();
 
-routes.get("/", getTransactions);
+routes.get("/", isAuthenticated, getTransactions);
 routes.post("/", postTransactionsValidations, postTransaction);
 routes.put("/:id", updateTransactionsValidations, updateTransaction);
 routes.delete("/:id", deleteTransaction);

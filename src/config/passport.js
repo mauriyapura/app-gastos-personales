@@ -6,20 +6,21 @@ const bcrypt = require("bcrypt");
 
 passport.use(new LocalStrategy({
     usernameField:"email",
+    passwordField: "password"
 
 }, async(email,password,done)=>{
     const user = await User.findOne({where: {
         email: email
     }});
     if(!user){
-        return done(null,false,{message:"Not User Found"});
+        return done(null,false,{message:"User not Found"});
     }else{
-        const newPass = await bcrypt.hash(password, 10);
         const savedPass = user.password;
-
-        if (newPass == savedPass){
+        const newPass = await bcrypt.compare(password, savedPass);
+        
+        if (newPass){            
             return done(null,user);
-        }else{
+        }else{            
             return done(null,false,{message:"Incorrect Password"});
         }
     }
@@ -37,8 +38,14 @@ passport.deserializeUser((id,done)=>{
 });
 
 
+/*
+passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
 
-
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});*/
 
 
 
