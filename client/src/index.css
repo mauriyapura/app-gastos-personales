@@ -25,5 +25,9 @@ code {
   justify-content: center;
 }
 
-
+.title {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
 

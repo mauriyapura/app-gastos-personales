@@ -3,10 +3,9 @@ import { AuthContext } from '../auth/AuthContext';
 import { types } from '../types/types';
 
 
-export const LoginScreen = ({history}) => {
-
+export const LoginScreen = ({history}) => { 
+    
     const {dispatch} = useContext(AuthContext);
-
     const handleLogin =()=>{
         
         const lastPath = localStorage.getItem("lastPath") || "/" ;

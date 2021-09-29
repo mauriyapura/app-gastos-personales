@@ -11,7 +11,7 @@ const Home = () => {
         <div>
             Aplicacion de gastos
             <h3>Hola</h3>
-            { /*<button type="button" className="btn btn-outline-warning" onClick={signOut}>LogOut</button>*/ }
+            
         </div>
     )
 }

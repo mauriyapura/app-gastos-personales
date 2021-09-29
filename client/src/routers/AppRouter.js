@@ -9,9 +9,11 @@ import {
 import { AuthContext } from '../auth/AuthContext';
 import Home from '../components/Home';
 import { LoginScreen } from '../components/LoginScreen';
+import { LoginForm } from '../components/OldLogin';
 
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
+import { Navbar } from '../components/ui/NavBar';
 
 export const AppRouter = () => {
 
@@ -20,9 +22,11 @@ export const AppRouter = () => {
 
     return (
         <Router>
-            <div>
+            <Navbar />
+
+            <div className="m-3">
                 <Switch>
-                    <PublicRoute exact path="/login" isAuthenticated={user.logged} component={LoginScreen} />
+                    <PublicRoute exact path="/login" isAuthenticated={user.logged} component={LoginForm} />
                     <PrivateRoute path="/" isAuthenticated={user.logged} component={Home} />                                      
                 </Switch>
             </div>
