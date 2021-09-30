@@ -16,9 +16,13 @@ export const authReducer = (state={}, action)=>{
                 logged: true
             }
         case types.logout:
-            return{
+            return {
                 logged: false
-            }          
+            }      
+        case types.signin:
+            return {
+                logged: false
+            }    
            
         default:
             return state;

@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import {
     BrowserRouter as Router,
@@ -8,8 +7,8 @@ import {
 
 import { AuthContext } from '../auth/AuthContext';
 import Home from '../components/Home';
-import { LoginScreen } from '../components/LoginScreen';
-import { LoginForm } from '../components/OldLogin';
+import { LoginForm } from '../components/Login';
+import { SignIn } from '../components/SignIn';
 
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
@@ -27,6 +26,7 @@ export const AppRouter = () => {
             <div className="m-3">
                 <Switch>
                     <PublicRoute exact path="/login" isAuthenticated={user.logged} component={LoginForm} />
+                    <PublicRoute exact path="/signin" isAuthenticated={user.logged} component={SignIn} />
                     <PrivateRoute path="/" isAuthenticated={user.logged} component={Home} />                                      
                 </Switch>
             </div>

@@ -7,8 +7,9 @@ export const reqLogin = async(url, userData)=>{
         url: url,
         data: userData,
         responseType: 'json'
-    })            
-        .catch(err=>console.log("falló login"))    
+    })
+        .then(res=>res.data)              
+        .catch(err=>console.log("Error en el backend") )    
 
     return reqData
 }

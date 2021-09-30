@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { useHistory } from 'react-router';
-import { reqLogin } from '../helpers/requestAjax';
+import { reqLogin } from '../helpers/reqLogin';
 
 import { AuthContext } from '../auth/AuthContext';
 import { types } from '../types/types';
@@ -9,39 +8,39 @@ export const LoginForm = ({history}) => {
 
     const {dispatch} = useContext(AuthContext);
 
+    const [error, setError] = useState("");
     const [details, setDetails] = useState({
         email:"",
         password:""
-    });  
-    //let history = useHistory();
-    let error = "";
+    });    
 
     const submitHandler = async(e)=>{
         e.preventDefault();     
         const url = 'http://localhost:3001/api/v1/users/login';        
-        const infoLogin = await reqLogin(url, details);       
+        const infoLogin = await reqLogin(url, details);               
         const lastPath = localStorage.getItem("lastPath") || "/" ;        
              
-        if(infoLogin){
+        if(infoLogin.success === true){
             dispatch({
                 type: types.login,
                 payload: {
-                    email: infoLogin.data.email
+                    email: infoLogin.email
                 }
             });
             history.replace(lastPath);      
-            console.log(infoLogin.data)
+            console.log(infoLogin)
         }else{
-            error = `Error de login`
-        }
-               
-    }
+            console.log("error en oldLogin")
+            setError(infoLogin.message)
+        }               
+    }   
 
     return (
         <div className="containerPrincipal col-lg-3">
             <form className="containerSecundario" onSubmit={submitHandler}>
+                <h3>INICIAR SESIÓN</h3>
                 <div className="form-group " >
-                    <label>Email Address: </label>
+                    <label>Email: </label>
                     <br />
                     <input
                         type="text"
@@ -50,7 +49,7 @@ export const LoginForm = ({history}) => {
                         value={details.email}
                         onChange={e=>setDetails({...details, email:e.target.value})} 
                     />
-                    <br />
+                    
                     <label>Contraseña: </label>
                     <br />
                     <input
@@ -61,9 +60,9 @@ export const LoginForm = ({history}) => {
                         onChange={e=>setDetails({...details, password:e.target.value})}
                         autoComplete="off" 
                     />
-                    <br />
-                    <input type="submit" value="Login" className="btn btn-primary"/>
-                    { (error!="") ? (<div className="error alert alert-danger">{error}</div>) : "" }                    
+                    
+                    { (error!="") ? (<div className="error alert alert-danger mt-3 mb-0 animate__animated animate__fadeIn">{error}</div>) : "" }                    
+                    <input type="submit" value="Login" className="btn btn-primary mt-3"/>
                 </div>
             </form>
       </div>

@@ -15,11 +15,18 @@ export const Navbar = () => {
             type: types.logout
         });
     }
-
     const handleSignIn = ()=>{
 
+        history.replace("/signin");
+        dispatch({
+            type: types.signin
+        })
         console.log("Entrando a Sign In")
+    }
+    const handleLogin = ()=>{
 
+        history.replace("/login");       
+        
     }
 
 
@@ -30,16 +37,22 @@ export const Navbar = () => {
             </div>                                  
 
             <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                <ul className="navbar-nav ms-auto me-4">
-
-                    <span className="nav-item nav-link text-info">
-                        {email}
-                    </span>
-
+                <ul className="navbar-nav ms-auto me-4">           
+                                        
                     { 
                         (logged)
-                            ? ( <button className="nav-item nav-link btn" onClick={handleLogout}>Logout</button> ) 
-                            : ( <button className="nav-item nav-link btn" onClick={handleSignIn}>SignIn</button> ) 
+                            ? ( 
+                                <>
+                                <span className="nav-item nav-link text-info">{email}</span>
+                                <button className="nav-item nav-link btn" onClick={handleLogout}>Logout</button>
+                                </>
+                              ) 
+                            : ( 
+                                <>
+                                <button className="nav-item nav-link btn" onClick={handleLogin}>LogIn</button>
+                                <button className="nav-item nav-link btn" onClick={handleSignIn}>SignIn</button>
+                                </>
+                              ) 
                     }                 
                     
                 </ul>
