@@ -33,12 +33,14 @@ const postUser = async(req, res ) => {
     try {
         const newUser = new User({email, password});        
         await newUser.save();
-        res.json( newUser );
+        //res.json( newUser );
+        res.json({success:true})
         
     } catch (error) {
         console.error(error);
         res.status(404)
         res.json({
+            success: false,
             msg: 'Hable con el administrador'
         })        
     }

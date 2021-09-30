@@ -7,18 +7,18 @@ const {validationResult} = require("../commons");
 
 const _emailRequired = check("email", "Email required").not().isEmpty();
 const _emailValid = check("email", "Email is invalid").isEmail();
-/*
-const _emailExist = check("email1").custom(
-    async (email1)=>{        
+
+const _emailExist = check("email").custom(
+    async (email)=>{        
         const userFound = await User.findOne({
-            where: { email: email1 }
+            where: { email: email }
         })
-        console.log(email1, "---------")
-        if(!userFound){
-            throw new AppError("Email doesn´t exist in DB", 400);
+        //console.log(email, "---------")
+        if(userFound){
+            throw new AppError("This email is already in use", 400);
         }
     }
-);*/
+);
 
 const _password = check("password", "Password required").not().isEmpty();
 const _passwordlength = check("password", "Password required").custom(
@@ -42,7 +42,7 @@ const getRequestValidations = [
 const postRequestValidations = [
     _emailRequired,
     _emailValid,
-    //_emailExist,
+    _emailExist,
     _password,
     _passwordlength,
     validationResult
