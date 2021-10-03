@@ -24,7 +24,8 @@ export const LoginForm = ({history}) => {
             dispatch({
                 type: types.login,
                 payload: {
-                    email: infoLogin.email
+                    email: infoLogin.email,
+                    user_id: infoLogin.user_id
                 }
             });
             history.replace(lastPath);      

@@ -5,7 +5,7 @@ import { types } from '../../types/types';
 
 export const Navbar = () => {
 
-    const {user: {email, logged}, dispatch} = useContext(AuthContext);    
+    const {user: {email, logged, user_id}, dispatch} = useContext(AuthContext);    
     const history = useHistory();    
 
     const handleLogout = ()=>{
