@@ -4,7 +4,7 @@ const ExpressServer = require("./server/expressServer");
 const config = require("../config/index");
 const logger = require("./logger/index");
 const sequelize = require("../loaders/sequelize/index");
-
+require("../models/assocciations");
 
 
 const startServer = async ()=> {

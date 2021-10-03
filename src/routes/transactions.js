@@ -9,6 +9,7 @@ const {
 } = require("../controllers/transactions");
 
 const {
+    getTransactionsValidations,
     postTransactionsValidations,
     updateTransactionsValidations
 } = require("../middlewares/transactions.js/index");
@@ -16,7 +17,7 @@ const {
 
 const routes = Router();
 
-routes.get("/", isAuthenticated, getTransactions);
+routes.get("/:id", getTransactionsValidations, getTransactions);
 routes.post("/", postTransactionsValidations, postTransaction);
 routes.put("/:id", updateTransactionsValidations, updateTransaction);
 routes.delete("/:id", deleteTransaction);

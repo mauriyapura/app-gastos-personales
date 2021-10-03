@@ -1,13 +1,21 @@
 const express = require("express");
 const Transaction = require("../models/transaction");
+const User = require("../models/users");
 
+require("../models/assocciations");
 
-const getTransactions = async(req,res)=>{
+const getTransactions = async(req,res)=>{    
 
-    const transactions = await Transaction.findAll();
-    res.json( transactions);
+    const { id } = req.params;   
+
+    const transactions = await Transaction.findAll({
+        where:{
+            userId: id            
+        }             
+    })   
+    
+    res.json(transactions)       
 }
-
 
 const postTransaction = async(req, res ) => {
 
@@ -34,7 +42,6 @@ const updateTransaction = async(req, res)=>{
     const {body} = req;
 
     try {
-
         const transaction = await Transaction.findByPk(id);
         if( transaction){
             await transaction.update(body);
@@ -43,8 +50,7 @@ const updateTransaction = async(req, res)=>{
             return res.status(404).json({
                 msg: `No existe una operación con el id ${id}`
             });
-        }
-        
+        }        
     } catch (error) {
         console.error(error);
         res.status(500)
@@ -70,9 +76,6 @@ const deleteTransaction = async(req, res)=>{
         });
     }        
 } 
-
-
-
 
 module.exports={
     getTransactions,

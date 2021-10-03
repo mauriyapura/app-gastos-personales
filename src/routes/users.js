@@ -45,7 +45,7 @@ routes.post('/login', function(req, res, next) {
         if (loginErr) {
           return next(loginErr);
         }
-        return res.send({success: true, email: req.user.email, password: req.user.password});
+        return res.send({success: true, email: req.user.email, password: req.user.password, user_id: req.user.id});
       });      
     })(req, res, next);
   });

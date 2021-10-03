@@ -9,6 +9,7 @@ const passport = require("passport");
 const flash = require("connect-flash");
 const session = require("express-session");
 
+require("../../models/assocciations");
 class ExpressServer{
 
     constructor(){
@@ -28,7 +29,8 @@ class ExpressServer{
     }
 
     _middlewares(){
-        this.app.use(express.urlencoded({ extended: true}));
+        this.app.use(express.urlencoded({ extended: false}));
+        //this.app.use(bodyParser.json())
         this.app.use(express.json());
         this.app.use(morgan("tiny"));
         this.app.use(cors());
