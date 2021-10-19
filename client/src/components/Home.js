@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { crudReducer } from './reducers/crudReducer';
-
 import { AuthContext } from '../auth/AuthContext';
 import axios from 'axios';
 
@@ -8,8 +7,7 @@ const Home = () => {
     
     const {user: {user_id}, dispatchContext} = useContext(AuthContext);   
     
-    const [idd, setIdd] = useState(0);
-    
+    const [counterId, setCounterId] = useState(0);    
     const [data, setData] = useState({
         id: new Date().getTime(),
         type: "",
@@ -18,22 +16,20 @@ const Home = () => {
         amount: "",        
     });       
 
-    const [registros, dispatch] = useReducer(crudReducer, []);
-     
-    //let idBackend = 0;
+    const [registros, dispatch] = useReducer(crudReducer, []);    
     
     useEffect(() => {
         const getData = async () => {
             const response = await axios(`http://localhost:3001/api/v1/transactions/${user_id}`);
-            console.log(response.data, "clg del useEffect1")    
+            //console.log(response.data, "clg del useEffect1")    
 
             response.data.forEach((element, i) => {
                 dispatch({
                     type: "add",
                     payload: element
                 })
-                setIdd(element.id + 1) ;     
-                console.log(element, "clg del useEffect2")
+                setCounterId(element.id + 1) ;     
+                //console.log(element, "clg del useEffect2")
             });
         }        
         getData()
@@ -41,9 +37,9 @@ const Home = () => {
     
     const handleAdd = (e)=>{
         e.preventDefault();
-        console.log("operacion agregada");
-        console.log(data);
-        setData({...data, id: idd + 1})
+        //console.log("operacion agregada");
+        //console.log(data);
+        setData({...data, id: counterId + 1})
 
         const postData = async () => {
             const response = await axios({
@@ -56,13 +52,13 @@ const Home = () => {
                     userId: user_id
                 }
             });
-            console.log(response.data, "clg del useEffect1")    
+            //console.log(response.data, "clg del useEffect1")    
         }
         postData();
-        setIdd(idd + 1);
+        setCounterId(counterId + 1);
         dispatch({
             type: "add",
-            payload: {...data, id: idd}
+            payload: {...data, id: counterId}
         })       
     }
 
@@ -87,84 +83,81 @@ const Home = () => {
             <div>            
                 <h3>DASHBOARD</h3>
             </div>
-            <div className="container-fluid row" >
+            <div className="container-fluid row d-flex justify-content-between" >
                 
-                <div className="col-8 me-2">
-                    <div className="row ">
-                        <div className="col border border-dark text-center">
-                            Tipo
-                        </div>
-                        <div className="col border border-dark text-center">
-                            Fecha
-                        </div>  
-                        <div className="col-5 border border-dark text-center">
-                            Concepto
-                        </div>  
-                        <div className="col border border-dark text-center">
-                            Monto
-                        </div> 
-                        <div className="col-3 border border-dark text-center">
-                            Actualizar o Eliminar
-                        </div>                        
-                    </div>
-                    {                       
-                        registros.map((registro)=>(
-                            <div className="row" key={registro.id}>
-                            <div className="col border border-dark text-center">
-                                    {registro.type}
-                                </div>
-                                <div className="col border border-dark text-center">
-                                    {registro.fecha}
-                                </div>  
-                                <div className="col-5 border border-dark text-center">
-                                    <p>{registro.description}</p>
-                                </div>  
-                                <div className="col border border-dark text-center">
-                                    {registro.amount}
-                                </div> 
-                                <div className="col-3 border border-dark text-center">
-                                    <button className="btn btn-info m-1" >Modificar</button>
-                                    <button className="btn btn-danger m-1" onClick={()=>handleDelete(registro.id)}>Eliminar</button>
-                                </div>
-                            </div>
-                        ))                        
-                    }                                       
+                <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">
+                    
+                    <div className="table-responsive">
+                    <table className="table table-striped table-hover table-sm table-bordered">
+                        <caption>Lista de operaciones guardadas</caption>
+                        <thead>
+                            <tr className="table-primary">                            
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Concepto</th>
+                                <th>Monto</th>                            
+                                <th>Opciones</th>            
+                            </tr>
+                        </thead>
+                        <tbody>                              
+                            {
+                                registros.map((registro)=>(                                    
+                                    <tr className="table" key={registro.id}>
+                                        <td className="align-middle">{registro.type}</td>
+                                        <td className="align-middle">{registro.fecha}</td>
+                                        <td className="align-middle">{registro.description}</td>
+                                        <td className="align-middle">{registro.amount}</td>
+                                        <td>
+                                            <button className="btn btn-info m-1" >Modificar</button>
+                                            <button className="btn btn-danger m-1" onClick={()=>handleDelete(registro.id)}>Eliminar</button>
+                                        </td>
+                                    </tr>                                 
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                    </div>                                                          
                 </div>
-
-                <div className="col ms-2 border border-primary">
-                    <h3>Agregar Ingreso o Egreso</h3>
-                    <div>
-                        <form onSubmit={handleAdd}>
-                            <input type="radio" id="ing" name="ingreso-egreso" value="Ingreso" onChange={e=> setData({...data, type: e.target.value})}/>
-                            <label htmlFor="ing" className="ms-2 me-2">INGRESO</label>
-                            <input type="radio" id="egr" name="ingreso-egreso" value="Egreso" onChange={e=> setData({...data, type: e.target.value})}/>
-                            <label htmlFor="egr" className="ms-2 me-2">EGRESO</label>
-                            <br />                            
-                            <input 
-                                type="text"
-                                placeholder="Ingrese el concepto de la operación" 
-                                name="description" 
-                                autoComplete="off" 
-                                className="form-control mb-2"
-                                value={data.concepto} 
-                                onChange={e=>setData({...data, description:e.target.value})}
-                            />
-                            <input 
-                                type="number" 
-                                placeholder="Ingrese el monto ($) de la operación" 
-                                name="amount"
-                                autoComplete="off" 
-                                className="form-control mb-2"
-                                value={data.monto}
-                                onChange={e=>setData({...data, amount: e.target.value})}
-                            />
-                            <button type="submit" className="btn btn-primary mb-2">
-                                Agregar
-                            </button>
-                               
-
-                        </form>
-                    </div>
+                
+                <div className="col-12 order-1 order-md-2 col-md-4 mt-2 formulario">
+                    <h3 className="d-flex justify-content-center">Agregar Ingreso o Egreso</h3>                    
+                    <form onSubmit={handleAdd}>
+                        <div className="row">
+                            <div className="col-12 mb-2 d-flex justify-content-center align-items-center">                               
+                                <input type="radio" className="ms-2 me-2" id="ing" name="ingreso-egreso" value="Ingreso" onChange={e=> setData({...data, type: e.target.value})}/>
+                                <label htmlFor="ing" className="form-check-label">INGRESO</label>                            
+                                <input type="radio" className="ms-2 me-2" id="egr" name="ingreso-egreso" value="Egreso" onChange={e=> setData({...data, type: e.target.value})}/>
+                                <label htmlFor="egr" className="form-check-label">EGRESO</label>   
+                            </div>
+                            <div className="col-12 mb-2">
+                                <input 
+                                    type="text"
+                                    placeholder="Ingrese la descripción" 
+                                    name="description" 
+                                    autoComplete="off" 
+                                    className="form-control"
+                                    value={data.concepto} 
+                                    onChange={e=>setData({...data, description:e.target.value})}
+                                />
+                            </div>
+                            <div className="col-12 mb-2">
+                                <input 
+                                    type="number" 
+                                    placeholder="Ingrese el monto ($)" 
+                                    name="amount"
+                                    autoComplete="off" 
+                                    className="form-control"
+                                    value={data.monto}
+                                    onChange={e=>setData({...data, amount: e.target.value})}
+                                />
+                            </div>
+                            <div className="col-12 mb-2 d-flex justify-content-center">
+                                <button type="submit" className="btn btn-primary">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>                                              
+                    </form>                    
                 </div>
             </div>
         </div>
@@ -172,4 +165,3 @@ const Home = () => {
 }
 
 export default Home
-
