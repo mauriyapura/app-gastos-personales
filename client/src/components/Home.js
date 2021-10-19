@@ -11,7 +11,7 @@ const Home = () => {
     const [data, setData] = useState({
         id: new Date().getTime(),
         type: "",
-        fecha: (new Date).toLocaleDateString('en-GB'),
+        date: (new Date).toLocaleDateString('en-GB'),
         description: "",
         amount: "",        
     });       
@@ -26,10 +26,10 @@ const Home = () => {
             response.data.forEach((element, i) => {
                 dispatch({
                     type: "add",
-                    payload: element
+                    payload: {...element, date: element.date.split('-').reverse().join('/')}
                 })
                 setCounterId(element.id + 1) ;     
-                //console.log(element, "clg del useEffect2")
+                console.log(element, "clg del useEffect2")
             });
         }        
         getData()
@@ -49,7 +49,8 @@ const Home = () => {
                     type: data.type,
                     description: data.description,
                     amount: data.amount,
-                    userId: user_id
+                    userId: user_id,
+                    date: (data.date).split('/').reverse().join('-')
                 }
             });
             //console.log(response.data, "clg del useEffect1")    
@@ -104,7 +105,7 @@ const Home = () => {
                                 registros.map((registro)=>(                                    
                                     <tr className="table" key={registro.id}>
                                         <td className="align-middle">{registro.type}</td>
-                                        <td className="align-middle">{registro.fecha}</td>
+                                        <td className="align-middle">{registro.date}</td>
                                         <td className="align-middle">{registro.description}</td>
                                         <td className="align-middle">{registro.amount}</td>
                                         <td>
