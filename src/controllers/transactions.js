@@ -38,7 +38,7 @@ const postTransaction = async(req, res ) => {
 
 const updateTransaction = async(req, res)=>{
 
-    const { id } = req;
+    const { id } = req.params;
     const {body} = req;
 
     try {

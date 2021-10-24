@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useReducer, useRef, useState } from 'reac
 import { crudReducer } from './reducers/crudReducer';
 import { AuthContext } from '../auth/AuthContext';
 import axios from 'axios';
+import { UpdateModal } from './UpdateModal';
 
 const Home = () => {     
     
@@ -15,7 +16,13 @@ const Home = () => {
         description: "",
         amount: "",        
     });       
-
+    const [selectedRow, setSelectedRow] = useState({
+        id: "",
+        type: "",
+        description: "",
+        amount: "",
+        date: ""
+    })
     const [registros, dispatch] = useReducer(crudReducer, []);    
     
     useEffect(() => {
@@ -78,29 +85,27 @@ const Home = () => {
         })
     }
     
+    
 
     return (
         <div>
-            <div>            
-                <h3>DASHBOARD</h3>
-            </div>
+            
             <div className="container-fluid row d-flex justify-content-between" >
                 
-                <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">
-                    
+                <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">                    
                     <div className="table-responsive">
-                    <table className="table table-striped table-hover table-sm table-bordered">
-                        <caption>Lista de operaciones guardadas</caption>
-                        <thead>
-                            <tr className="table-primary">                            
-                                <th>Tipo</th>
-                                <th>Fecha</th>
-                                <th>Concepto</th>
-                                <th>Monto</th>                            
-                                <th>Opciones</th>            
-                            </tr>
-                        </thead>
-                        <tbody>                              
+                        <table className="table table-striped table-hover table-sm ">
+                            <caption>Lista de operaciones guardadas</caption>
+                            <thead>
+                                <tr className="table-primary">                            
+                                    <th>Tipo</th>
+                                    <th>Fecha</th>
+                                    <th>Concepto</th>
+                                    <th>Monto</th>                            
+                                    <th>Opciones</th>            
+                                </tr>
+                            </thead>
+                            <tbody>                              
                             {
                                 registros.map((registro)=>(                                    
                                     <tr className="table" key={registro.id}>
@@ -109,14 +114,14 @@ const Home = () => {
                                         <td className="align-middle">{registro.description}</td>
                                         <td className="align-middle">{registro.amount}</td>
                                         <td>
-                                            <button className="btn btn-info m-1" >Modificar</button>
+                                            <button className="btn btn-info m-1" onClick={()=>setSelectedRow(registro)} data-bs-toggle="modal" data-bs-target="#modal1">Modificar</button>
                                             <button className="btn btn-danger m-1" onClick={()=>handleDelete(registro.id)}>Eliminar</button>
                                         </td>
                                     </tr>                                 
                                 ))
                             }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>                                                          
                 </div>
                 
@@ -161,6 +166,8 @@ const Home = () => {
                     </form>                    
                 </div>
             </div>
+
+            <UpdateModal dataRequired={selectedRow} reducerCrud={dispatch}/>
         </div>
     )
 }
