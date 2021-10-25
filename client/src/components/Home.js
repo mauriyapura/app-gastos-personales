@@ -6,7 +6,8 @@ import { UpdateModal } from './UpdateModal';
 
 const Home = () => {     
     
-    const {user: {user_id}, dispatchContext} = useContext(AuthContext);  
+    const {user: {user_id}, dispatchContext} = useContext(AuthContext);
+    const [error, setError] = useState("")  
     const [saldo, setSaldo] = useState(0);    
     const [counterId, setCounterId] = useState(0);    
     const [data, setData] = useState({
@@ -42,6 +43,15 @@ const Home = () => {
     
     const handleAdd = (e)=>{
         e.preventDefault();
+        if(data.type === ""){
+            return setError("Selecciona si es ingreso o egreso")
+        };
+        if(data.description.length < 3){
+            return setError("La descripcion debe ser de al menos 3 caracteres")
+        };
+        if(data.amount === ""){
+            return setError("Ingrese el monto")
+        }; 
         setData({...data, id: counterId + 1})
         console.log(data)
         const postData = async () => {
@@ -83,7 +93,7 @@ const Home = () => {
     }    
 
     return (
-        <div>            
+        <div>                   
             <div className="container-fluid row d-flex justify-content-between" >                
                 <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">                    
                     <div className="table-responsive">
@@ -155,6 +165,7 @@ const Home = () => {
                                     Agregar
                                 </button>
                             </div>
+                            { (error!="") ? (<div className="error alert alert-danger m-auto animate__animated animate__fadeIn">{error}</div>) : "" }             
                         </div>                                              
                     </form>                    
                 </div>
