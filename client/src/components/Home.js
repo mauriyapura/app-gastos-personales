@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { crudReducer } from './reducers/crudReducer';
 import { AuthContext } from '../auth/AuthContext';
 import axios from 'axios';
@@ -6,8 +6,8 @@ import { UpdateModal } from './UpdateModal';
 
 const Home = () => {     
     
-    const {user: {user_id}, dispatchContext} = useContext(AuthContext);   
-    
+    const {user: {user_id}, dispatchContext} = useContext(AuthContext);  
+    const [saldo, setSaldo] = useState(0);    
     const [counterId, setCounterId] = useState(0);    
     const [data, setData] = useState({
         id: new Date().getTime(),
@@ -23,20 +23,18 @@ const Home = () => {
         amount: "",
         date: ""
     })
-    const [registros, dispatch] = useReducer(crudReducer, []);    
-    
+    const [registros, dispatch] = useReducer(crudReducer, []);
+        
     useEffect(() => {
         const getData = async () => {
-            const response = await axios(`http://localhost:3001/api/v1/transactions/${user_id}`);
-            //console.log(response.data, "clg del useEffect1")    
-
+            const response = await axios(`http://localhost:3001/api/v1/transactions/${user_id}`);            
             response.data.forEach((element, i) => {
                 dispatch({
                     type: "add",
                     payload: {...element, date: element.date.split('-').reverse().join('/')}
-                })
-                setCounterId(element.id + 1) ;     
-                console.log(element, "clg del useEffect2")
+                })                
+                setSaldo(prev => element.type == "Ingreso" ? prev + element.amount : prev - element.amount);                                            
+                setCounterId(element.id + 1);   
             });
         }        
         getData()
@@ -44,10 +42,8 @@ const Home = () => {
     
     const handleAdd = (e)=>{
         e.preventDefault();
-        //console.log("operacion agregada");
-        //console.log(data);
         setData({...data, id: counterId + 1})
-
+        console.log(data)
         const postData = async () => {
             const response = await axios({
                 method: 'post',
@@ -59,43 +55,40 @@ const Home = () => {
                     userId: user_id,
                     date: (data.date).split('/').reverse().join('-')
                 }
-            });
-            //console.log(response.data, "clg del useEffect1")    
+            });                
         }
+        let amountNumber = +data.amount;
+        setSaldo(prev => data.type == "Ingreso" ? prev + amountNumber : prev - amountNumber);                                      
         postData();
         setCounterId(counterId + 1);
         dispatch({
             type: "add",
             payload: {...data, id: counterId}
-        })       
+        })
     }
 
-    const handleDelete = (idDelete)=>{
-        
+    const handleDelete = (idDelete, tipo, monto)=>{        
         const deleteData = async()=>{
             const reponse = await axios({
                 method: "delete",
                 url: `http://localhost:3001/api/v1/transactions/${idDelete}`
             })
         }
-        deleteData();
+        deleteData();        
         dispatch({
             type: "delete",
             payload: idDelete
         })
-    }
-    
-    
+        setSaldo(prev => tipo == "Ingreso" ? prev - monto : prev + monto);                                 
+    }    
 
     return (
-        <div>
-            
-            <div className="container-fluid row d-flex justify-content-between" >
-                
+        <div>            
+            <div className="container-fluid row d-flex justify-content-between" >                
                 <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">                    
                     <div className="table-responsive">
                         <table className="table table-striped table-hover table-sm ">
-                            <caption>Lista de operaciones guardadas</caption>
+                            <caption>Saldo: ${saldo}</caption>
                             <thead>
                                 <tr className="table-primary">                            
                                     <th>Tipo</th>
@@ -115,11 +108,11 @@ const Home = () => {
                                         <td className="align-middle">{registro.amount}</td>
                                         <td>
                                             <button className="btn btn-info m-1" onClick={()=>setSelectedRow(registro)} data-bs-toggle="modal" data-bs-target="#modal1">Modificar</button>
-                                            <button className="btn btn-danger m-1" onClick={()=>handleDelete(registro.id)}>Eliminar</button>
+                                            <button className="btn btn-danger m-1" onClick={()=>handleDelete(registro.id, registro.type, registro.amount)}>Eliminar</button>
                                         </td>
-                                    </tr>                                 
+                                    </tr>                                                                                                         
                                 ))
-                            }
+                            }                            
                             </tbody>
                         </table>
                     </div>                                                          
@@ -166,10 +159,8 @@ const Home = () => {
                     </form>                    
                 </div>
             </div>
-
-            <UpdateModal dataRequired={selectedRow} reducerCrud={dispatch}/>
+            <UpdateModal dataRequired={selectedRow} reducerCrud={dispatch} saldoState={setSaldo}/>
         </div>
     )
 }
-
 export default Home

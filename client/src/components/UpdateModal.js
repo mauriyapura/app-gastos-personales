@@ -1,8 +1,7 @@
-
 import React, { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 
-export const UpdateModal = ({dataRequired, reducerCrud}) => {
+export const UpdateModal = ({dataRequired, reducerCrud, saldoState}) => {
 
     const [formData, setFormData] = useState({
         id: "",
@@ -17,9 +16,8 @@ export const UpdateModal = ({dataRequired, reducerCrud}) => {
     const bodyxd = document.body
     useEffect(() => {
         setFormData(dataRequired)
-    }, [dataRequired]);     
+    }, [dataRequired]); 
     
-
     const handleUpdate = (e)=>{
         e.preventDefault();
         if(formData.description.length < 3){
@@ -27,8 +25,7 @@ export const UpdateModal = ({dataRequired, reducerCrud}) => {
         };
         if(formData.amount === ""){
             return setError("Ingrese el monto")
-        };
-        
+        };        
         const updateData = async()=>{
             const response = await axios({
                 method: "put",
@@ -44,6 +41,11 @@ export const UpdateModal = ({dataRequired, reducerCrud}) => {
             type: "update",            
             payload: formData
         });
+        let originalAmount = dataRequired.amount
+        let currentAmount = +formData.amount
+        let difference = currentAmount - originalAmount;        
+        saldoState(prev=> dataRequired.type === "Ingreso" ? prev + difference : prev - difference);
+
         setError("");        
         modalUpdate.setAttribute("style", "display:none")
         modalUpdate.setAttribute("class", "modal fade")
@@ -104,7 +106,3 @@ export const UpdateModal = ({dataRequired, reducerCrud}) => {
         </div>
     )
 }
-
-
-
-
