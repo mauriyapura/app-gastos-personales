@@ -40,11 +40,11 @@ export const SignIn = ({history}) => {
         const infoSignIn = await reqSignIn(url, email, password, setProblem);
         if(infoSignIn.success === true){
             console.log("Usted se ha registrado correctamente");
-            console.log(infoSignIn)
             history.replace("/login");            
+            window.alert("Usted se ha registrado correctamente");
         }else{
-            console.log("ni idea xq vino x aqui")
-        }          
+            console.log("error al registrarse")
+        }      
         
     }
 

@@ -28,10 +28,9 @@ export const LoginForm = ({history}) => {
                     user_id: infoLogin.user_id
                 }
             });
-            history.replace(lastPath);      
-            console.log(infoLogin)
-        }else{
-            console.log("error en oldLogin")
+            history.replace(lastPath);    
+   
+        }else{            
             setError(infoLogin.message)
         }               
     }   

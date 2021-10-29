@@ -52,8 +52,7 @@ const Home = () => {
         if(data.amount === ""){
             return setError("Ingrese el monto")
         }; 
-        setData({...data, id: counterId + 1})
-        console.log(data)
+        setData({...data, id: counterId + 1})        
         const postData = async () => {
             const response = await axios({
                 method: 'post',
