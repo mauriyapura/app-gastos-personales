@@ -15,9 +15,7 @@ const _amountIsNumber = check("amount", "amount must be a number").isNumeric();
 const _idIsValid = check("id").custom(
     
     async (id)=>{        
-        const userFound = await User.findByPk(id)
-        console.log(`clg de findbypk. el id pasado es ${id}`)
-        console.log(userFound)
+        const userFound = await User.findByPk(id)        
         if(!userFound){
             throw new AppError("This id doesn't exist", 400);
         }

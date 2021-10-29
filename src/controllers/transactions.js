@@ -1,6 +1,5 @@
 const express = require("express");
 const Transaction = require("../models/transaction");
-const User = require("../models/users");
 
 require("../models/assocciations");
 

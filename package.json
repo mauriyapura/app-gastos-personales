@@ -19,8 +19,8 @@
   "devDependencies": {
     "nodemon": "^2.0.12"
   },
-  "name": "practica-16-challengejs",
-  "version": "0.0.1",
+  "name": "api-gastos-personales",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,13 +29,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mauriyapura/backend-ChallengeJS.git"
+    "url": "git+https://github.com/mauriyapura/app-gastos-personales.git"
   },
   "author": "Mauricio Gabriel Yapura",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mauriyapura/backend-ChallengeJS/issues"
+    "url": "https://github.com/mauriyapura/app-gastos-personales/issues"
   },
-  "homepage": "https://github.com/mauriyapura/backend-ChallengeJS#readme",
+  "homepage": "https://github.com/mauriyapura/app-gastos-personales#readme",
   "description": ""
 }

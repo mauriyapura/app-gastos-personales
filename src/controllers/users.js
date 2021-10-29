@@ -2,12 +2,10 @@ const express = require("express");
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 
-
-
 const getUser = async(req,res) => {
 
     const {email, password} = req.query;
-    console.log("email es: ", email);
+    //console.log("email es: ", email);
     const queryPassword = await bcrypt.hash(password, 10);
     const user = await User.findOne({
         where: {
@@ -32,8 +30,7 @@ const postUser = async(req, res ) => {
     
     try {
         const newUser = new User({email, password});        
-        await newUser.save();
-        //res.json( newUser );
+        await newUser.save();        
         res.json({success:true})
         
     } catch (error) {
@@ -87,11 +84,8 @@ const deleteUser = async(req, res)=>{
         return res.status(404).json({
             msg: `No existe un usuario con el id ` + id
         });
-    }        
-    
+    }            
 }
-
-
 
 module.exports = {    
     getUser,

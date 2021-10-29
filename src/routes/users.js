@@ -20,12 +20,6 @@ routes.post("/", postRequestValidations,postUser);
 routes.put("/:id", updateUser);
 routes.delete("/:id", deleteUser);
 
-/*
-routes.post("/login", passport.authenticate("local"), (req,res)=>{
-    res.json({email: req.user.email, password: req.user.password})
-});
-*/
-
 routes.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
       if (err) {
