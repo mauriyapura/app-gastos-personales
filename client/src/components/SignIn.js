@@ -3,6 +3,7 @@ import { reqSignIn } from '../helpers/reqSignIn';
 
 export const SignIn = ({history}) => {
 
+    const [loading, setLoading] = useState(false);
     const [problem, setProblem] = useState(null);
     const [error, setError] = useState("");
     const [data, setData] = useState({
@@ -26,26 +27,30 @@ export const SignIn = ({history}) => {
 
     const submitHandler = async(e)=>{
         e.preventDefault();
+        setLoading(true);
         const url = 'http://localhost:3001/api/v1/users';  
         if(password.length < 4 ){
+            setLoading(false);
             return setError("Las contraseñas deben ser de al menos 4 caracteres");
         }
         if(password === confirmPassword){
+            setLoading(false);
             console.log("Contraseñas sí coinciden");                        
         }else{
+            setLoading(false);
             console.log("Contraseñas no coinciden")
             return setError("Las contraseñas no coinciden");
         }
 
         const infoSignIn = await reqSignIn(url, email, password, setProblem);
         if(infoSignIn.success === true){
-            console.log("Usted se ha registrado correctamente");
+            setLoading(false);            
             history.replace("/login");            
             window.alert("Usted se ha registrado correctamente");
         }else{
+            setLoading(false);
             console.log("error al registrarse")
-        }      
-        
+        }          
     }
 
     return (
@@ -86,7 +91,7 @@ export const SignIn = ({history}) => {
                     />
                     
                     { (error!="") ? (<div className="error alert alert-danger mt-3 mb-0 animate__animated animate__fadeIn">{error}</div>) : "" }                    
-                    <input type="submit" value="Login" className="btn btn-primary mt-3"/>
+                    <input type="submit" value="Login" className="btn btn-primary mt-3" disabled={loading}/>
                 </div>
             </form>
       </div>

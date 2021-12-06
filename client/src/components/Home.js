@@ -7,7 +7,9 @@ import { UpdateModal } from './UpdateModal';
 const Home = () => {     
     
     const {user: {user_id}, dispatchContext} = useContext(AuthContext);
-    const [error, setError] = useState("")  
+    const [loading, setLoading] = useState(false);
+    const [checking, setChecking] = useState(true);
+    const [error, setError] = useState("");  
     const [saldo, setSaldo] = useState(0);    
     const [counterId, setCounterId] = useState(0);    
     const [data, setData] = useState({
@@ -35,21 +37,27 @@ const Home = () => {
                     payload: {...element, date: element.date.split('-').reverse().join('/')}
                 })                
                 setSaldo(prev => element.type == "Ingreso" ? prev + element.amount : prev - element.amount);                                            
-                setCounterId(element.id + 1);   
+                setCounterId(element.id + 1); 
+                setChecking(false);
+
             });
         }        
-        getData()
+        getData();        
     },[])   
     
     const handleAdd = (e)=>{
         e.preventDefault();
+        setLoading(true);
         if(data.type === ""){
+            setLoading(false);
             return setError("Selecciona si es ingreso o egreso")
         };
         if(data.description.length < 3){
+            setLoading(false);
             return setError("La descripcion debe ser de al menos 3 caracteres")
         };
         if(data.amount === ""){
+            setLoading(false);
             return setError("Ingrese el monto")
         }; 
         setData({...data, id: counterId + 1})        
@@ -73,7 +81,8 @@ const Home = () => {
         dispatch({
             type: "add",
             payload: {...data, id: counterId}
-        })
+        });
+        setLoading(false);        
     }
 
     const handleDelete = (idDelete, tipo, monto)=>{        
@@ -94,6 +103,7 @@ const Home = () => {
     return (
         <div>                   
             <div className="container-fluid row d-flex justify-content-between" >                
+                { (checking===true) ? (<span className="mb-2"><b>Cargando registros...</b></span>) : "" }
                 <div className="col-12 order-2 order-md-1 col-md-8 mt-2 ">                    
                     <div className="table-responsive">
                         <table className="table table-striped table-hover table-sm ">
@@ -107,7 +117,7 @@ const Home = () => {
                                     <th>Opciones</th>            
                                 </tr>
                             </thead>
-                            <tbody>                              
+                            <tbody>
                             {
                                 registros.map((registro)=>(                                    
                                     <tr className="table" key={registro.id}>
@@ -160,7 +170,7 @@ const Home = () => {
                                 />
                             </div>
                             <div className="col-12 mb-2 d-flex justify-content-center">
-                                <button type="submit" className="btn btn-primary">
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
                                     Agregar
                                 </button>
                             </div>

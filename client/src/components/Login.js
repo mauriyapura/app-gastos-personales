@@ -7,7 +7,7 @@ import { types } from '../types/types';
 export const LoginForm = ({history}) => {
 
     const {dispatch} = useContext(AuthContext);
-
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [details, setDetails] = useState({
         email:"",
@@ -16,10 +16,10 @@ export const LoginForm = ({history}) => {
 
     const submitHandler = async(e)=>{
         e.preventDefault();     
+        setLoading(true);     
         const url = 'http://localhost:3001/api/v1/users/login';        
         const infoLogin = await reqLogin(url, details);               
         const lastPath = localStorage.getItem("lastPath") || "/" ;        
-             
         if(infoLogin.success === true){
             dispatch({
                 type: types.login,
@@ -29,9 +29,10 @@ export const LoginForm = ({history}) => {
                 }
             });
             history.replace(lastPath);    
-   
+            setLoading(false);      
         }else{            
-            setError(infoLogin.message)
+            setError(infoLogin.message);
+            setLoading(false); 
         }               
     }   
 
@@ -62,7 +63,7 @@ export const LoginForm = ({history}) => {
                     />
                     
                     { (error!="") ? (<div className="error alert alert-danger mt-3 mb-0 animate__animated animate__fadeIn">{error}</div>) : "" }                    
-                    <input type="submit" value="Login" className="btn btn-primary mt-3"/>
+                    <input type="submit" value="Login" className="btn btn-primary mt-3" disabled={loading}/>
                 </div>
             </form>
       </div>
