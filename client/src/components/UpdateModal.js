@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const UpdateModal = ({dataRequired, reducerCrud, saldoState}) => {
@@ -10,33 +10,32 @@ export const UpdateModal = ({dataRequired, reducerCrud, saldoState}) => {
         amount: "",
         date: ""
     });
-    const [error, setError] = useState("")
-    const modalUpdate = document.querySelector("#modal1");
-    const sombraModal = document.querySelector(".modal-backdrop");
-    const bodyxd = document.body
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false); 
+    
     useEffect(() => {
         setFormData(dataRequired)
     }, [dataRequired]); 
     
-    const handleUpdate = (e)=>{
+    const handleUpdate = async(e)=>{
         e.preventDefault();
+        setLoading(true);
         if(formData.description.length < 3){
             return setError("La descripcion debe ser de al menos 3 caracteres")
         };
         if(formData.amount === ""){
             return setError("Ingrese el monto")
         };        
-        const updateData = async()=>{
-            const response = await axios({
-                method: "put",
-                url: `http://localhost:3001/api/v1/transactions/${formData.id}`,
-                data: {
-                    description: formData.description,
-                    amount: formData.amount
-                }
-            })
-        };
-        updateData();
+        
+        const response = await axios({
+            method: "put",
+            url: `http://localhost:3001/api/v1/transactions/${formData.id}`,
+            data: {
+                description: formData.description,
+                amount: formData.amount
+            }
+        });        
+        
         reducerCrud({
             type: "update",            
             payload: formData
@@ -47,14 +46,11 @@ export const UpdateModal = ({dataRequired, reducerCrud, saldoState}) => {
         saldoState(prev=> dataRequired.type === "Ingreso" ? prev + difference : prev - difference);
 
         setError("");        
-        modalUpdate.setAttribute("style", "display:none")
-        modalUpdate.setAttribute("class", "modal fade")
-        modalUpdate.setAttribute("aria-hidden", "true")
-        modalUpdate.removeAttribute("role")
-        modalUpdate.removeAttribute("aria-modal")
-        sombraModal.remove();
-        bodyxd.setAttribute("class", "")
-        bodyxd.setAttribute("style", "")
+
+        let myModalEl = document.getElementById('modal1');
+        let modal = bootstrap.Modal.getInstance(myModalEl);
+        modal.hide();
+        setLoading(false);       
     }
 
     return (         
@@ -91,8 +87,8 @@ export const UpdateModal = ({dataRequired, reducerCrud, saldoState}) => {
                                     />
                                 </div>
                                 <div className="col-12 d-flex justify-content-center">
-                                    <button type="submit" className="btn btn-primary" onClick={handleUpdate} id="updateBtn">Aceptar</button>
-                                    <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" className="btn btn-primary" onClick={handleUpdate} id="updateBtn" disabled={loading}>Aceptar</button>
+                                    <button type="button" className="btn btn-light" data-bs-dismiss="modal" disabled={loading}>Cancelar</button>
                                 </div>
                             </div>                                              
                         </form>                       

@@ -85,18 +85,17 @@ const Home = () => {
         setLoading(false);        
     }
 
-    const handleDelete = (idDelete, tipo, monto)=>{        
-        const deleteData = async()=>{
-            const reponse = await axios({
-                method: "delete",
-                url: `http://localhost:3001/api/v1/transactions/${idDelete}`
-            })
-        }
-        deleteData();        
+    const handleDelete = async(idDelete, tipo, monto)=>{        
+        
+        const reponse = await axios({
+            method: "delete",
+            url: `http://localhost:3001/api/v1/transactions/${idDelete}`
+        });        
+               
         dispatch({
             type: "delete",
             payload: idDelete
-        })
+        });
         setSaldo(prev => tipo == "Ingreso" ? prev - monto : prev + monto);                                 
     }    
 
@@ -120,7 +119,7 @@ const Home = () => {
                             <tbody>
                             {
                                 registros.map((registro)=>(                                    
-                                    <tr className="table" key={registro.id}>
+                                    <tr key={registro.id}>
                                         <td className="align-middle">{registro.type}</td>
                                         <td className="align-middle">{registro.date}</td>
                                         <td className="align-middle">{registro.description}</td>

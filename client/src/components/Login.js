@@ -37,36 +37,40 @@ export const LoginForm = ({history}) => {
     }   
 
     return (
-        <div className="containerPrincipal col-lg-3">
-            <form className="containerSecundario" onSubmit={submitHandler}>
-                <h3>INICIAR SESIÓN</h3>
-                <div className="form-group " >
-                    <label>Email: </label>
-                    <br />
-                    <input
-                        type="text"
-                        className="form-control" 
-                        name="email"
-                        value={details.email}
-                        onChange={e=>setDetails({...details, email:e.target.value})} 
-                    />
-                    
-                    <label>Contraseña: </label>
-                    <br />
-                    <input
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        value={details.password}
-                        onChange={e=>setDetails({...details, password:e.target.value})}
-                        autoComplete="off" 
-                    />
-                    
-                    { (error!="") ? (<div className="error alert alert-danger mt-3 mb-0 animate__animated animate__fadeIn">{error}</div>) : "" }                    
-                    <input type="submit" value="Login" className="btn btn-primary mt-3" disabled={loading}/>
-                </div>
-            </form>
-      </div>
+        <div className='row justify-content-center'>
+
+            <div className="containerPrincipal col-sm-4 ">
+                <form className="containerSecundario" onSubmit={submitHandler}>
+                    <h3>INICIAR SESIÓN</h3>
+                    <div className="form-group " >
+                        <label>Email: </label>
+                        <br />
+                        <input
+                            type="text"
+                            className="form-control" 
+                            name="email"
+                            value={details.email}
+                            onChange={e=>setDetails({...details, email:e.target.value})} 
+                        />
+                        
+                        <label>Contraseña: </label>
+                        <br />
+                        <input
+                            type="password"
+                            className="form-control"
+                            name="password"
+                            value={details.password}
+                            onChange={e=>setDetails({...details, password:e.target.value})}
+                            autoComplete="off" 
+                        />
+                        
+                        { (error!="") ? (<div className="error alert alert-danger mt-3 mb-0 animate__animated animate__fadeIn">{error}</div>) : "" }                    
+                        <input type="submit" value="Login" className="btn btn-primary mt-3" disabled={loading}/>
+                    </div>
+                </form>
+            </div>
+
+        </div>
     )
 }
 
